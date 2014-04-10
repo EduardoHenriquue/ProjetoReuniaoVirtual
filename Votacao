@@ -1,0 +1,20 @@
+package br.ufpb.dce.poo.ReunioesVirtuais.Votacao;
+
+import java.util.*;
+
+public class Votacao {
+	List<VotacaoListener> listeners = new LinkedList<VotacaoListener>();
+	private Assunto assunto;
+	
+	public Votacao(){
+		
+	}
+	
+	
+	public void novoVoto(Opcao opcao){
+		VotacaoEvent event = new VotacaoEvent(this, opcao);
+		for(VotacaoListener lis: this.listeners){
+			lis.novoVoto(event);
+		}
+	}
+}
