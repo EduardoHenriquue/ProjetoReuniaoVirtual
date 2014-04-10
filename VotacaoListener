@@ -1,0 +1,6 @@
+package br.ufpb.dce.poo.ReunioesVirtuais.Votacao;
+
+public interface VotacaoListener {
+	public void novoVoto(VotacaoEvent event);
+	
+}
