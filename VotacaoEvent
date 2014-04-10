@@ -1,0 +1,13 @@
+package br.ufpb.dce.poo.ReunioesVirtuais.Votacao;
+
+public class VotacaoEvent {
+	
+	private int voto;
+	private Opcao opcao;
+	private Votacao votacao;
+
+	public VotacaoEvent(Votacao votacao, Opcao opcao){
+		this.votacao = votacao;
+		this.opcao = opcao;
+	}
+}
