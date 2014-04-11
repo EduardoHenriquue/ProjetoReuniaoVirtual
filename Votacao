@@ -2,19 +2,43 @@ package br.ufpb.dce.poo.ReunioesVirtuais.Votacao;
 
 import java.util.*;
 
+
+
 public class Votacao {
-	List<VotacaoListener> listeners = new LinkedList<VotacaoListener>();
+
+	List<Opcao> votos = new LinkedList<Opcao>();
 	private Assunto assunto;
+	// contadores de votos
+	int aFavor = 0;
+	int contra = 0;
 	
-	public Votacao(){
+
+	public Votacao(Assunto asnt){
+	
+		this.assunto = asnt;
 		
 	}
 	
 	
-	public void novoVoto(Opcao opcao){
-		VotacaoEvent event = new VotacaoEvent(this, opcao);
-		for(VotacaoListener lis: this.listeners){
-			lis.novoVoto(event);
-		}
+	public void votar(Opcao opcao){
+		
+		this.votos.add(opcao);
+		
 	}
+	
+	public String getResultado(){
+	
+		for(Opcao vt: this.votos){
+			if(vt.opcao.toUpperCase() == SIM){
+				aFavor++;
+			}
+			else if(vt.opcao.toUpperCase() == NAO){
+				contra++;
+			}
+		}
+		
+		return "O Ponto de Votação referente ao assunto "+ this.assunto
+		+" obteve "+ this.aFavor +" votos a favor e "+ this.contra +" votos contra";
+	}
+	
 }
