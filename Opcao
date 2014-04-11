@@ -1,0 +1,11 @@
+package br.ufpb.dce.poo.ReunioesVirtuais.Votacao;
+
+public class Opcao {
+	
+	public static final String SIM = "sim";
+	public static final String NAO = "nao";
+
+	public Opcao(){
+		
+	}
+}
