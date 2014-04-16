@@ -4,6 +4,7 @@ public class Opcao {
 	
 	public static final String SIM = "sim";
 	public static final String NAO = "nao";
+	public static final string ABSTER = "abster-se";
 
 	public Opcao(){
 		
