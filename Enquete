@@ -7,7 +7,7 @@ import java.util.Map;
 
 
 
-public class Votacao {
+public class Enquete {
 	
 	List<VotacaoListener> listeners = new LinkedList<VotacaoListener>();
 	
@@ -17,7 +17,7 @@ public class Votacao {
 	private Map<String, Integer> opcoes = new HashMap<String, Integer>();
 
 
-	public Votacao(String idAssunto, String descricao){
+	public Enquete(String idAssunto, String descricao){
 
 		this.idAssunto = idAssunto;
 		this.descricao = descricao;
