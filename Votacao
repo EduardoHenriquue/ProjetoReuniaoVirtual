@@ -1,44 +1,50 @@
 package br.ufpb.dce.poo.ReunioesVirtuais.Votacao;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 
 
 public class Votacao {
-
-	List<Opcao> votos = new LinkedList<Opcao>();
-	private Assunto assunto;
-	// contadores de votos
-	int aFavor = 0;
-	int contra = 0;
 	
-
-	public Votacao(Assunto asnt){
+	List<VotacaoListener> listeners = new LinkedList<VotacaoListener>();
 	
-		this.assunto = asnt;
-		
+	private String idAssunto;
+	private String descricao;
+	
+	private Map<String, Integer> opcoes = new HashMap<String, Integer>();
+
+
+	public Votacao(String idAssunto, String descricao){
+
+		this.idAssunto = idAssunto;
+		this.descricao = descricao;
+	}
+
+	/*
+	public void addOpcao(String opcao){
+		this.opcoes.put(opcao, new Integer(0));
+	}
+	*/
+	
+	public void votar(String opcao){
+		int voto = this.opcoes.get(opcao).intValue();
+		this.opcoes.put(opcao, new Integer(voto++));
 	}
 	
-	
-	public void votar(Opcao opcao){
-		
-		this.votos.add(opcao);
-		
-	}
-	
+
 	public String getResultado(){
-	
-		for(Opcao vt: this.votos){
-			if(vt.opcao.toUpperCase() == SIM){
-				aFavor++;
-			}
-			else if(vt.opcao.toUpperCase() == NAO){
-				contra++;
-			}
+		int qnt = opcoes.size();
+		for(Map<String, Integer> m: this.opcoes){
+			System.out.println(opcoes..intValue());
 		}
-		
-		return "O Ponto de Votação referente ao assunto "+ this.assunto
-		+" obteve "+ this.aFavor +" votos a favor e "+ this.contra +" votos contra";
+
+		return "O Ponto de Votação referente ao assunto "+ this.idAssunto
+		+" obteve "+  +" votos a favor e "+  +" votos contra e "+  +" de abstenção";
 	}
 	
+	
+
 }
