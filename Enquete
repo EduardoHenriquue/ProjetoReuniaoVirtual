@@ -9,8 +9,7 @@ import java.util.Map;
 
 public class Enquete {
 	
-	List<VotacaoListener> listeners = new LinkedList<VotacaoListener>();
-	
+
 	private String idAssunto;
 	private String descricao;
 	
@@ -23,28 +22,25 @@ public class Enquete {
 		this.descricao = descricao;
 	}
 
-	/*
+	
 	public void addOpcao(String opcao){
 		this.opcoes.put(opcao, new Integer(0));
 	}
-	*/
+	
 	
 	public void votar(String opcao){
 		int voto = this.opcoes.get(opcao).intValue();
-		this.opcoes.put(opcao, new Integer(voto++));
+		this.opcoes.put(opcao, new Integer(++voto));
 	}
 	
 
-	public String getResultado(){
-		int qnt = opcoes.size();
-		for(Map<String, Integer> m: this.opcoes){
-			System.out.println(opcoes..intValue());
+	public void getResultado(){
+		
+		for(Integer op: opcoes.values()){
+			System.out.println("Opção "+ op.toString() +" obteve "+ op.intValue()+" votos"); // imprime os votos exceto a opção
 		}
-
-		return "O Ponto de Votação referente ao assunto "+ this.idAssunto
-		+" obteve "+  +" votos a favor e "+  +" votos contra e "+  +" de abstenção";
+		
 	}
-	
 	
 
 }
