@@ -48,7 +48,7 @@ public class Votacao {
 	            	Thread.sleep(1000*minutos); // 1 segundo
 	        }
 	    	flag = true;
-	    	System.out.println("Votação lizada!");  
+	    	System.out.println("Votação finalizada, tempo esgotado!");  
 	            
 	     }catch (InterruptedException e){  
 	        System.out.println("Votação interrompida!");  
