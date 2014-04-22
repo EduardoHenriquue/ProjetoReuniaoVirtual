@@ -1,0 +1,64 @@
+package br.ufpb.dce.poo.ReunioesVirtuais.Votacao;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+
+
+public class Votacao {
+	
+	List<Usuario> usuariosVotantes;
+	
+	private String idAssunto;
+	private String descricao;
+	
+	private Map<String, Integer> opcoes = new HashMap<String, Integer>();
+
+	public Votacao(String idAssunto, String descricao){
+
+		this.idAssunto = idAssunto;
+		this.descricao = descricao;
+		this.usuariosVotantes = new LinkedList<Usuario>();
+	}
+
+	
+	public void addOpcao(String opcao){
+		this.opcoes.put(opcao, new Integer(0));
+	}
+	
+	
+	public void votar(String opcao, Usuario usuario) throws VotoInvalidoRunTimeException, UsuarioExistenteRunTimeException{
+		
+		if((opcoes.containsKey(opcao)) && !(usuariosVotantes.contains(usuario))){
+			int voto = this.opcoes.get(opcao).intValue();
+			this.opcoes.put(opcao, new Integer(++voto));
+			this.usuariosVotantes.add(usuario);
+		}
+		else if(usuariosVotantes.contains(usuario)){
+			throw new UsuarioExistenteRunTimeException("Opcão Inválida!");
+
+		}
+		else {
+			throw new VotoInvalidoRunTimeException("Opcão Inválida!");
+		}
+		
+	}
+	
+
+	public int getVotos(String opcao){
+		return (opcoes.get(opcao)).intValue();
+	}
+	
+	
+	public void getResultado(){
+		
+			System.out.println("Resultado da votação: "+opcoes.toString()); // imprime os votos
+		
+		
+	}
+	
+		
+
+}
