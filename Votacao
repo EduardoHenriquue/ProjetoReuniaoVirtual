@@ -7,17 +7,22 @@ import java.util.Map;
 
 
 
+
 public class Votacao {
+	
+	
 	
 	List<Usuario> usuariosVotantes;
 	
 	private String idAssunto;
 	private String descricao;
+	private int horas; 
+	
 	
 	private Map<String, Integer> opcoes = new HashMap<String, Integer>();
 
-	public Votacao(String idAssunto, String descricao){
-
+	public Votacao(String idAssunto, String descricao, int horas){
+		this.horas = horas;
 		this.idAssunto = idAssunto;
 		this.descricao = descricao;
 		this.usuariosVotantes = new LinkedList<Usuario>();
@@ -29,19 +34,57 @@ public class Votacao {
 	}
 	
 	
-	public void votar(String opcao, Usuario usuario) throws VotoInvalidoRunTimeException, UsuarioExistenteRunTimeException{
-		
-		if((opcoes.containsKey(opcao)) && !(usuariosVotantes.contains(usuario))){
-			int voto = this.opcoes.get(opcao).intValue();
-			this.opcoes.put(opcao, new Integer(++voto));
-			this.usuariosVotantes.add(usuario);
-		}
-		else if(usuariosVotantes.contains(usuario)){
-			throw new UsuarioExistenteRunTimeException("Opcão Inválida!");
-
-		}
-		else {
-			throw new VotoInvalidoRunTimeException("Opcão Inválida!");
+	/**
+	 * Conta o tempo da votação
+	 * 
+	 * @return boolean flag após término de execução do método
+	 */
+	public boolean tempoLimite(){
+		int minutos = 1; 		
+		int tempo = horas * minutos;
+		boolean flag = false;
+	    try{  
+	    	for (int i = tempo; i > 0; i--){  	    			                
+	            	Thread.sleep(1000*minutos); // 1 segundo
+	        }
+	    	flag = true;
+	    	System.out.println("Votação lizada!");  
+	            
+	     }catch (InterruptedException e){  
+	        System.out.println("Votação interrompida!");  
+	     }
+		return flag;     
+	}
+	
+	
+	/**
+	 * 
+	 * @param opcao
+	 * @param usuario
+	 * @throws VotoInvalidoRunTimeException
+	 * @throws UsuarioExistenteRunTimeException
+	 * @throws TempoEsgotadoException
+	 */
+	public void votar(String opcao, Usuario usuario) throws VotoInvalidoRunTimeException, UsuarioExistenteRunTimeException, TempoEsgotadoException{
+		try{
+			if(tempoLimite()){
+				if((opcoes.containsKey(opcao)) && !(usuariosVotantes.contains(usuario))){
+					int voto = this.opcoes.get(opcao).intValue();
+					this.opcoes.put(opcao, new Integer(++voto));
+					this.usuariosVotantes.add(usuario);
+				} else if(usuariosVotantes.contains(usuario)){
+					throw new UsuarioExistenteRunTimeException("Opcão Inválida!");
+	
+				}
+				else {
+					throw new VotoInvalidoRunTimeException("Opcão Inválida!");
+				}
+			}
+			else{
+				throw new TempoEsgotadoException("Tempo Esgotado!");
+			}
+		}catch (TempoEsgotadoException e){  
+	        System.out.println("Votação interrompida!");  
 		}
 		
 	}
@@ -55,7 +98,7 @@ public class Votacao {
 	public void getResultado(){
 		
 			System.out.println("Resultado da votação: "+opcoes.toString()); // imprime os votos
-		
+			
 		
 	}
 	
