@@ -1,0 +1,25 @@
+package br.ufpb.dce.poo.ReunioesVirtuais.Votacao;
+
+
+public class VotacaoFacade {
+	private Votacao votacao;
+
+	public VotacaoFacade() {
+		
+	}
+	
+	public void montaOpcao(){
+		votacao.addOpcao("sim");
+		votacao.addOpcao("nao");
+		votacao.addOpcao("abstencao");
+	}
+	
+	public void votar(String opcao, Usuario usuario) throws VotoInvalidoRunTimeException, UsuarioExistenteRunTimeException{
+		votacao.votar(opcao, usuario);
+		
+	}
+	
+	public void exibeResultado(){
+		votacao.getResultado();
+	}
+}
