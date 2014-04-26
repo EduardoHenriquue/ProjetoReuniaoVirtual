@@ -1,5 +1,9 @@
 package br.ufpb.dce.poo.ReunioesVirtuais.Votacao;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -98,10 +102,54 @@ public class Votacao {
 	public void getResultado(){
 		
 			System.out.println("Resultado da votação: "+opcoes.toString()); // imprime os votos
-			
-		
 	}
 	
+	public static void main(String [] args){
 		
+		/**
+		 * manipulando o horario
+		 */
+		int h = 36; // valor exemplo
+		Calendar c = Calendar.getInstance(); 
+		Date data = c.getTime(); 
+		
+		DateFormat hora1 = DateFormat.getTimeInstance();		
+		String hour = hora1.format(data);
+		System.out.println(hour);
+		
+		int hora = Integer.parseInt(hour.substring(0, 2)); // pega os 2 primeiros digitos referente as horas
+		int mim = Integer.parseInt(hour.substring(3, 5)); // pega os 2 digitos referente aos minutos
+		int seg = Integer.parseInt(hour.substring(6, 8)); // pega os 2 digitos referente aos segundos
+		
+		int horaLimite = h+hora;
+		int qntDias = horaLimite/24; // obtem a quantidade de dias somar o resultado a partir da data inicio da votação para calcular o termino
+		int horasASomar = horaLimite%24;// o resto de horas a ser somadas a partir das horas do inicio da votação
+		
+		System.out.println(horaLimite);
+		System.out.println(qntDias); 
+		System.out.println(horasASomar);
+		
+		/* Ex.: data inicio 25/04/14, hora inicio 20:40, duração da votação 50 horas
+		 * o termino será no dia 27/04/2014 as 22:40
+		 */
+		
+		/**
+		 * manipulando a data
+		 */
+		
+		Date data1 = c.getTime(); 
+		DateFormat date = DateFormat.getDateInstance();
+		String d = date.format(data1);
+		
+		System.out.println(d);
+		
+		int dia = Integer.parseInt(d.substring(0, 2)); // pega os 2 primeiros digitos referentes ao dia
+		int mes = Integer.parseInt(d.substring(3, 5)); // pega os 2 digitos referente a mês
+		int ano = Integer.parseInt(d.substring(6, 10)); // pega os 2 digitos referente ao ano
+	
+		System.out.println(dia);
+		System.out.println(mes);
+		System.out.println(ano);
 
+	}
 }
