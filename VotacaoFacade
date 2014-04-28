@@ -2,24 +2,20 @@ package br.ufpb.dce.poo.ReunioesVirtuais.Votacao;
 
 
 public class VotacaoFacade {
-	private Votacao votacao;
 
-	public VotacaoFacade() {
-		
+	private Votacao votacao = new Votacao();
+	
+	
+	public void adicionarOpcoes(String opcao){
+		votacao.addOpcao(opcao);
 	}
 	
-	public void montaOpcao(){
-		votacao.addOpcao("sim");
-		votacao.addOpcao("nao");
-		votacao.addOpcao("abstencao");
-	}
-	
-	public void votar(String opcao, Usuario usuario) throws VotoInvalidoRunTimeException, UsuarioExistenteRunTimeException{
+	public void adicionarVoto(String opcao, String usuario) throws ListaVaziaRuntimeException, VotoInvalidoRuntimeException, UsuarioExistenteRuntimeException, TempoEsgotadoRuntimeException{
 		votacao.votar(opcao, usuario);
-		
 	}
 	
-	public void exibeResultado(){
-		votacao.getResultado();
+	
+	public String exibeResultado(){
+		return votacao.getResultado();
 	}
 }
