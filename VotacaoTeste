@@ -1,3 +1,9 @@
+/**
+ * Estes testes estão sendo realizados com os métodos sendo chamados da classe VotacaoFacade
+ * Visto que é impossibilitado o ato de inicialização alguns RuntimeException estão retornando null
+ * devido o construtor default da classe Votacao
+ */
+
 package br.ufpb.dce.poo.ReunioesVirtuais.Testes;
 
 import static org.junit.Assert.*;
@@ -11,10 +17,9 @@ import br.ufpb.dce.poo.ReunioesVirtuais.Votacao.UsuarioExistenteRuntimeException
 import br.ufpb.dce.poo.ReunioesVirtuais.Votacao.VotacaoFacade;
 import br.ufpb.dce.poo.ReunioesVirtuais.Votacao.VotoInvalidoRuntimeException;
 
-public class VotacaoTeste {
+public class TesteVotacaoFacade {
 
 	VotacaoFacade testeVotacao;
-	
 	String usuario1 = "maxwell";
 	String usuario2 = "eduardo";
 	
