@@ -1,9 +1,6 @@
 package br.ufpb.dce.poo.ReunioesVirtuais.Votacao;
 
-import java.text.DateFormat;
-import java.util.Calendar;
 import java.util.Date;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,108 +9,125 @@ import java.util.Map;
 
 public class Votacao {
 	
-	List<Usuario> usuariosVotantes;
-	
+	private Map<String, Integer> opcoes = new HashMap<String, Integer>();
+	private List<String> usuarios;
 	private String idAssunto;
 	private String descricao;
-	private int horas; 
+	private int duracao; 
+	Date dataInicio ;
 	
-	
-	private Map<String, Integer> opcoes = new HashMap<String, Integer>();
-
-	public Votacao(String idAssunto, String descricao, int horas){
-		this.horas = horas;
+	public Votacao(String idAssunto, String descricao, int duracao){
+		this.dataInicio = new Date();
+		this.dataInicio.setHours(dataInicio.getHours() + duracao);
+		this.duracao = duracao;
 		this.idAssunto = idAssunto;
 		this.descricao = descricao;
-		this.usuariosVotantes = new LinkedList<Usuario>();
+		this.usuarios = new LinkedList<String>();
+	}
+	
+	public Votacao(){
+		
 	}
 
-	
 	public void addOpcao(String opcao){
 		this.opcoes.put(opcao, new Integer(0));
 	}
 	
 	
-	/**
-	 * 
+	/** 
+	 *  Método que acrecenta os votos as opcoes contidas no map opcoes
 	 * @param opcao
 	 * @param usuario
 	 * @throws VotoInvalidoRunTimeException
 	 * @throws UsuarioExistenteRunTimeException
-	 * @throws TempoEsgotadoException
+	 * @throws TempoEsgotadoRunTimeException 
 	 */
-	public void votar(String opcao, Usuario usuario) throws VotoInvalidoRunTimeException, UsuarioExistenteRunTimeException, TempoEsgotadoException{
-	
-		if((opcoes.containsKey(opcao)) && !(usuariosVotantes.contains(usuario))){
-			int voto = this.opcoes.get(opcao).intValue();
-			this.opcoes.put(opcao, new Integer(++voto));
-			this.usuariosVotantes.add(usuario);
-		} else if(usuariosVotantes.contains(usuario)){
-			throw new UsuarioExistenteRunTimeException("Opcão Inválida!");
+	public void votar(String opcao, String usuario) throws ListaVaziaRuntimeException, VotoInvalidoRuntimeException, UsuarioExistenteRuntimeException, TempoEsgotadoRuntimeException{
+		
+		Date dataAtual = new Date(); // Inicializa a data do dia	
+		try{
+		
+			if (!(tempoLimite(dataAtual))){ // Passa a data do dia para o método que irá comparar com a data limite para efetuar a votação
+				
+				if(!(this.opcoes.isEmpty())){ // verifica se o map opçoes está vazio
+				
+					if(!this.pesquisaUsuario(usuario)){ // verifica se o usuário ainda não efetuou voto 
+						
+						if(this.opcoes.containsKey(opcao)){ // verificar se a opção passada está no map opcoes
+							int voto = this.opcoes.get(opcao).intValue();
+							this.opcoes.put(opcao, new Integer(++voto));
+							this.usuarios.add(usuario);
+						}
+						else if(this.pesquisaUsuario(usuario)){
+							throw new UsuarioExistenteRuntimeException("O Usuario já votou!");
+						}
+					}
+					else {
+						throw new VotoInvalidoRuntimeException("Opcão Inválida!");
+					}		
+				}
+				else {
+					throw new ListaVaziaRuntimeException("Não há Opções adicionadas!");
+				}
+			}else{
+				throw new TempoEsgotadoRuntimeException("A Votação já foi encerrada!");
+			}
 		}
-		else {
-			throw new VotoInvalidoRunTimeException("Opcão Inválida!");
+		catch(Exception e){
+			System.out.println(e.getMessage());
 		}
 	}
 	
+	
+	/**
+	 * Delimita o tempo da votação comparando a data inicio com a data atual
+	 * 
+	 * @return boolean 
+	 */
+	public boolean tempoLimite(Date dataAtual){			
+		boolean acabou = false;
+		
+		Date dataFinal = new Date();
+		
+		dataFinal = dataInicio;
+		try{
+			if (dataAtual.after(dataFinal)){
+				acabou = true;
+				return acabou;		
+			}
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		return acabou;
+	}
+	
+	/**
+	 * Retorna o o resultado da votação
+	 * @return
+	 */
+	public String getResultado(){		
+		return "Resultado da votação: " + opcoes.toString();			
+	}
+	
+	
+	/**
+	 *  Verifica se o usuário está na lista de usuários que já votaram
+	 * @param usuario
+	 * @return boolean
+	 */
+	public boolean pesquisaUsuario(String usuario){
+		boolean existe = false;
+		try{
+			for(String us: this.usuarios){
+				if(us.equals(usuario)){
+					existe = true;
+					throw new UsuarioExistenteRuntimeException("O Usuario já votou!"); 
+				}
+			}
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		return existe;
+	}	
 
-	public int getVotos(String opcao){
-		return (opcoes.get(opcao)).intValue();
-	}
-	
-	
-	public void getResultado(){
-		
-			System.out.println("Resultado da votação: "+opcoes.toString()); // imprime os votos
-	}
-	
-	
-	public static void main(String [] args){
-		
-		/**
-		 * manipulando o horario
-		 */
-		int h = 36; // valor exemplo
-		Calendar c = Calendar.getInstance(); 
-		Date data = c.getTime(); 
-		
-		DateFormat hora1 = DateFormat.getTimeInstance();		
-		String hour = hora1.format(data);
-		System.out.println(hour);
-		
-		int hora = Integer.parseInt(hour.substring(0, 2)); // pega os 2 primeiros digitos referente as horas
-		int mim = Integer.parseInt(hour.substring(3, 5)); // pega os 2 digitos referente aos minutos
-		int seg = Integer.parseInt(hour.substring(6, 8)); // pega os 2 digitos referente aos segundos
-		
-		int horaLimite = h+hora;
-		int qntDias = horaLimite/24; // obtem a quantidade de dias somar o resultado a partir da data inicio da votação para calcular o termino
-		int horasASomar = horaLimite%24;// o resto de horas a ser somadas a partir das horas do inicio da votação
-		
-		System.out.println(horaLimite);
-		System.out.println(qntDias); 
-		System.out.println(horasASomar);
-		
-		/* Ex.: data inicio 25/04/14, hora inicio 20:40, duração da votação 50 horas
-		 * o termino será no dia 27/04/2014 as 22:40
-		 */
-		
-		/**
-		 * manipulando a data
-		 */
-		
-		Date data1 = c.getTime(); 
-		DateFormat date = DateFormat.getDateInstance();
-		String d = date.format(data1);
-		
-		System.out.println(d);
-		
-		int dia = Integer.parseInt(d.substring(0, 2)); // pega os 2 primeiros digitos referentes ao dia
-		int mes = Integer.parseInt(d.substring(3, 5)); // pega os 2 digitos referente a mês
-		int ano = Integer.parseInt(d.substring(6, 10)); // pega os 2 digitos referente ao ano
-	
-		System.out.println(dia);
-		System.out.println(mes);
-		System.out.println(ano);
-
-	}
 }
