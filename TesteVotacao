@@ -1,0 +1,96 @@
+/**
+ * Estes testes estão sendo realizados com os métodos sendo chamados diretamente na classe votação
+ */
+ 
+
+package br.ufpb.dce.poo.ReunioesVirtuais.Testes;
+
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import br.ufpb.dce.poo.ReunioesVirtuais.Votacao.ListaVaziaRuntimeException;
+import br.ufpb.dce.poo.ReunioesVirtuais.Votacao.Opcao;
+import br.ufpb.dce.poo.ReunioesVirtuais.Votacao.TempoEsgotadoRuntimeException;
+import br.ufpb.dce.poo.ReunioesVirtuais.Votacao.UsuarioExistenteRuntimeException;
+import br.ufpb.dce.poo.ReunioesVirtuais.Votacao.Votacao;
+import br.ufpb.dce.poo.ReunioesVirtuais.Votacao.VotoInvalidoRuntimeException;
+
+public class TesteVotacao {
+	
+	Votacao votacao;
+	String usuario1 = "maxwell";
+	String usuario2 = "eduardo";
+	String idAssuto = "Exemplo";
+	String descricao = "Exemplo teste de Votação";
+	int duracao = 1;
+
+	@Before
+	public void setUp() throws Exception {
+		votacao = new Votacao(this.idAssuto, this.descricao, this.duracao);
+	}
+
+	/**
+	 * Teste para adicionar as opções e votar
+	 * @throws TempoEsgotadoRuntimeException
+	 * @throws ListaVaziaRuntimeException
+	 * @throws VotoInvalidoRuntimeException
+	 * @throws UsuarioExistenteRuntimeException
+	 */
+		@Test
+		public void testVotar() throws TempoEsgotadoRuntimeException, ListaVaziaRuntimeException, VotoInvalidoRuntimeException, UsuarioExistenteRuntimeException {
+			boolean teste = false;
+			try{
+				votacao.addOpcao(Opcao.SIM);
+				votacao.addOpcao(Opcao.NAO);
+				votacao.addOpcao(Opcao.ABSTENCAO);
+				votacao.votar(Opcao.NAO, usuario1);
+				System.out.println(votacao.getResultado());
+				teste = true;
+
+			}catch(Exception e ){
+				fail(e.getMessage());
+			}
+			assertEquals(teste,true);
+				
+		}
+		
+		/**
+		 * Método que testa a possibilidade de haver usuários iguais
+		 * @throws UsuarioExistenteRuntimeException 
+		 */
+		@Test
+		public void testUsuario() throws Exception {
+			boolean teste = false;
+			try{
+				votacao.addOpcao(Opcao.SIM);
+				votacao.addOpcao(Opcao.NAO);
+				votacao.addOpcao(Opcao.ABSTENCAO);
+				votacao.votar(Opcao.SIM, usuario1);
+				votacao.votar(Opcao.NAO, usuario1);
+				System.out.println(votacao.getResultado());
+				teste = true;
+
+			}catch(Exception e ){
+				fail(e.getMessage());
+			}
+			assertEquals(teste,true);
+		}
+		
+		/**
+		 * Testa a hipótese de ocorrer o ato do voto mesmo não tendo opções adicionadas
+		 */
+		@Test
+		public void testOpcao() {
+			boolean teste = false;
+			try{
+				votacao.votar(Opcao.SIM, usuario1);
+				teste = true;
+
+			}catch(Exception e ){
+				fail(e.getMessage());
+			}
+			assertEquals(teste,true);
+		}
+
+}
