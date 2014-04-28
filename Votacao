@@ -46,30 +46,34 @@ public class Votacao {
 		
 		Date dataAtual = new Date(); // Inicializa a data do dia	
 		try{
-		
-			if (!(tempoLimite(dataAtual))){ // Passa a data do dia para o método que irá comparar com a data limite para efetuar a votação
+			// Passa a data do dia para o método que irá comparar com a data limite para efetuar a votação
+			if (!(tempoLimite(dataAtual))){
+			
+				// verifica se o map opçoes está vazio
+				if(!(this.opcoes.isEmpty())){
 				
-				if(!(this.opcoes.isEmpty())){ // verifica se o map opçoes está vazio
-				
-					if(!this.pesquisaUsuario(usuario)){ // verifica se o usuário ainda não efetuou voto 
+					// verifica se o usuário ainda não efetuou voto 
+					if(!this.pesquisaUsuario(usuario)){ 
 						
-						if(this.opcoes.containsKey(opcao)){ // verificar se a opção passada está no map opcoes
+						// verificar se a opção passada está no map opcoes
+						if(this.opcoes.containsKey(opcao)){ 
 							int voto = this.opcoes.get(opcao).intValue();
 							this.opcoes.put(opcao, new Integer(++voto));
 							this.usuarios.add(usuario);
 						}
-						else if(this.pesquisaUsuario(usuario)){
-							throw new UsuarioExistenteRuntimeException("O Usuario já votou!");
+						else {
+							throw new VotoInvalidoRuntimeException("Opcão Inválida!"); 
 						}
 					}
-					else {
-						throw new VotoInvalidoRuntimeException("Opcão Inválida!");
-					}		
 				}
 				else {
 					throw new ListaVaziaRuntimeException("Não há Opções adicionadas!");
 				}
-			}else{
+			}
+			else if(this.duracao < 0){ // Caso informem um número negativo
+				throw new TempoEsgotadoRuntimeException("Apenas números positivos para a duração da Reunião!");
+			}
+			else {
 				throw new TempoEsgotadoRuntimeException("A Votação já foi encerrada!");
 			}
 		}
@@ -95,7 +99,8 @@ public class Votacao {
 				acabou = true;
 				return acabou;		
 			}
-		}catch(Exception e){
+		} 
+		catch(Exception e){
 			System.out.println(e.getMessage());
 		}
 		return acabou;
@@ -124,7 +129,8 @@ public class Votacao {
 					throw new UsuarioExistenteRuntimeException("O Usuario já votou!"); 
 				}
 			}
-		}catch(Exception e){
+		}
+		catch(Exception e){
 			System.out.println(e.getMessage());
 		}
 		return existe;
